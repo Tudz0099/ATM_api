@@ -21,7 +21,10 @@ mongoose.connect(
     })
     .then(()=>{
         console.log(`successfully connected`); 
-        })
+    })
+    .catch((e)=>{
+            console.log(e);
+    });
 
 
 app.get('/', (req, res) => {

@@ -31,10 +31,10 @@ const getAtms = (req, res) => {
 const deleteAtm = async(req, res, next) => {
     const {atmId} = req.params
     try{
-        data.removeAtm(atmId)
-        return res.json({
-            remove: true,
-            atms: data.getAtms()
+        data.removeAtm(atmId) 
+        return res.json({ 
+            remove: true, 
+            atms: data.getAtms() 
         })
     }catch(err){
         res.json(err.message)

@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
 
 
 // Register
@@ -16,9 +17,17 @@ const register = async(req, res, next) => {
             password: hashedPassword
         })
         await user.save()
+
+        const PRIVATE_TOKEN = jwt.sign(
+            {userId: user._id},
+            process.env.ACCESS_TOKEN_SECRET,
+           
+        );
+
         return res.json({
             message: 'Register successfully !',
-            user: user.toJSON()
+            user: user.toJSON(),
+            PRIVATE_TOKEN
         });
     }catch(err){
         res.json(err.message)
@@ -32,9 +41,16 @@ const login = async(req, res, next) => {
         const user = await User.findOne({email: email});
         if(user && (await bcrypt.compare(password, user.password))) {
 
+            const PRIVATE_TOKEN = jwt.sign(
+                {userId: user._id},
+                process.env.ACCESS_TOKEN_SECRET,
+               
+            );
+
             return res.json({
                 message: 'Login successfully !',
-                user: user.toJSON()
+                user: user.toJSON(),
+                PRIVATE_TOKEN
             });
         }
         res.json('wrong password !');

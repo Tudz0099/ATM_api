@@ -2,20 +2,20 @@ const {uuid} = require('uuidv4')
 
 const newId = uuid()
 const atm1 = {
-    "id": newId,
+    "id": 'f7b35edf-4da7-4a7d-a37f-edc4ecd85f11',
     'status': 'Free'
 }
 
 const atm2 = {
-    "id": newId,
+    "id": '1aef91f4-f92b-43b0-b338-f60d1fdb1fdb',
     'status': 'Free'
 }
 
 const atm3 = {
-    "id": newId,
+    "id": '334b841e-cdad-496d-a651-49417b69351d',
     'status': 'Free'
 }
-
+ 
 const person1 = {
     'name': 'grey',
     'transaction': 1000
@@ -60,9 +60,20 @@ const data = {
     removeAtm(id) {
         const atm = this.atms.find(e => e.id === id)
 
+        const waitForAtm = (i) => {  
+            if(this.atms[i].status !== 'Free'){
+                setTimeout(() => {
+                    waitForAtm(i)
+                }, 10);
+            }else{
+                this.atms.splice(i, 1)
+                return 
+            }
+        }
+
         for(i=0; i < this.atms.length; i++){
             if(this.atms[i] === atm){
-                this.atms.splice(i, 1)
+                waitForAtm(i)
             }
         }
     },
@@ -122,7 +133,7 @@ const data = {
                 atmHandle.status = 'Busy'
                 atmHandle.client = randomPerson.name
 
-                intervalTime(atmHandle, randomPerson)
+                intervalTime(atmHandle, randomPerson) 
                 doSetTimeout(atmHandle);
                 break;
             }

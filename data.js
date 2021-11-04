@@ -41,45 +41,9 @@ const data = {
     persons:[person1, person2, person3, person4],
     queues:[],
 
-    getAtms() {
-        return this.atms
-    },
+    transactions(randomPerson){
 
-    getQueues() {
-        return this.queues
-    },
-
-    create() {
-        
-        const atm = {
-            id: newId,
-            status: 'Free' 
-        }
-        this.atms.push(atm)
-    },
-    removeAtm(id) {
-        const atm = this.atms.find(e => e.id === id)
-
-        const waitForAtm = (i) => {  
-            if(this.atms[i].status !== 'Free'){
-                setTimeout(() => {
-                    waitForAtm(i)
-                }, 10);
-            }else{
-                this.atms.splice(i, 1)
-                return 
-            }
-        }
-
-        for(i=0; i < this.atms.length; i++){
-            if(this.atms[i] === atm){
-                waitForAtm(i)
-            }
-        }
-    },
-    transactions(randomPerson){ 
-
-        const doSetTimeout = (atmHandle) => { 
+        const setTransactionTime = (atmHandle) => { 
             setTimeout(function() { 
                 atmHandle.status = 'Free'
                 atmHandle.client = ''
@@ -87,7 +51,7 @@ const data = {
              }, atmHandle.transaction*1000);
         }
 
-        const intervalTime = (atmHandle, randomPerson) => {
+        const countdownTime = (atmHandle, randomPerson) => {
             let time = randomPerson.transaction/1000
             atmHandle.transaction = time
             setTimeout(() => {
@@ -119,8 +83,8 @@ const data = {
                     atmHandle.status = 'Busy'
                     atmHandle.client = this.queues[0].name
 
-                    intervalTime(atmHandle, this.queues[0])
-                    doSetTimeout(atmHandle);
+                    countdownTime(atmHandle, this.queues[0])
+                    setTransactionTime(atmHandle);
                     this.queues.splice(0, 1)
                     break;
                 }
@@ -133,8 +97,8 @@ const data = {
                 atmHandle.status = 'Busy'
                 atmHandle.client = randomPerson.name
 
-                intervalTime(atmHandle, randomPerson) 
-                doSetTimeout(atmHandle);
+                countdownTime(atmHandle, randomPerson) 
+                setTransactionTime(atmHandle);
                 break;
             }
         }
@@ -143,8 +107,7 @@ const data = {
         if(!findAtm){
             this.queues.push(randomPerson)
         }
-
-    }
+    } 
 }
 
  

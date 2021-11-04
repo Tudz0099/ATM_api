@@ -1,24 +1,23 @@
 const data = require('../data')
-const {uuid} = require('uuidv4')
-const newId = uuid()
+const { v4: uuid_v4 } = require('uuid');
 
 
 // post atm
 const postAtm = async(req, res)=>{
     try{
         const atm = {
-            id: newId,
-            status: 'Free' 
-        }
+            id: uuid_v4(),
+            status: 'Free',
+            remove: false 
+        } 
         data.atms.push(atm)
         return res.json(data.atms)
-    }catch(err){
+    }catch(err){ 
         res.json(err.message)
     }
-    
 }
 
-// get atm  
+// get atm   
 
 const getAtms = (req, res) => {
     try{
@@ -53,9 +52,10 @@ const deleteAtm = async(req, res, next) => {
 
         for(i=0; i < data.atms.length; i++){
             if(data.atms[i] === atm){
+                data.atms[i].remove = true
                 waitForAtm(i)
             }
-        }
+        }   
     }catch(err){
         res.json(err.message)
     }

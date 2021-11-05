@@ -22,7 +22,6 @@ const atm3 = {
 
 const data = {
     atms: [atm1, atm2, atm3],
-    persons:[],
     queues:[],
     processedClients:'',
 
@@ -58,7 +57,6 @@ const data = {
                 }
             }
         }
-
     }
 }  
 

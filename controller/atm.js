@@ -2,13 +2,15 @@ const data = require('../data')
 const { v4: uuid_v4 } = require('uuid');
 
 
-// post atm
+// add atm
 const postAtm = async(req, res)=>{
+    const atmName = req.body.name
     try{
         const atm = {
             id: uuid_v4(),
             status: 'Free',
-            remove: false 
+            remove: false,
+            name: atmName
         } 
         data.atms.push(atm)
         return res.json(data.atms)
@@ -17,13 +19,31 @@ const postAtm = async(req, res)=>{
     }
 }
 
-// get atm   
+// add people
+const addPeople = async(req, res) => {
+    const {namePeople, transaction} = req.body
+    try{
+        const people = {
+            name: namePeople,
+            transaction: transaction
+        }
+        data.queues.push(people)
+        return res.json({
+            success: true,
+            message: 'Add people success !'
+        })
+    }catch(err){
+        res.json(err.message)
+    }
+}
 
+// get atm
 const getAtms = (req, res) => {
     try{
         return res.json({
             atm: data.atms,
-            queue: data.queues
+            queue: data.queues,
+            processedClient: data.processedClients
         })
     }catch(err){
         res.json(err.message)
@@ -41,7 +61,7 @@ const deleteAtm = async(req, res, next) => {
             if(data.atms[i].status !== 'Free'){
                 setTimeout(() => {
                     waitForAtm(i)
-                }, 20); 
+                }, 20);
             }else{
                 data.atms.splice(i, 1)
                 return res.json({
@@ -63,14 +83,33 @@ const deleteAtm = async(req, res, next) => {
 
 
 setInterval(() => {
-    const person = data.persons
-    const randomPerson = person[Math.floor(Math.random() *person.length)];
-    data.transactions(randomPerson)
-}, 1000); 
+    function randomPerson() {
+        let text = '';
+        let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        let number = "1234567";
+        let person = {};
+       
+        for (var i = 0; i < 8; i++)
+          text += possible.charAt(Math.floor(Math.random() * possible.length)
+        );
+        for (var i = 0; i < 1; i++)
+        person.transaction = (number.charAt(Math.floor(Math.random() * number.length))
+        );
+    
+        person.name = text
+        return person; 
+    } 
+
+    data.transactions(randomPerson()) 
+    data.setTransactionInterval()
+}, 1000);
 
 
-module.exports = {
+
+ 
+module.exports = { 
     postAtm,
     deleteAtm,
-    getAtms
+    getAtms,
+    addPeople
 }

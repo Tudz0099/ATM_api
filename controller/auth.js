@@ -16,7 +16,7 @@ const register = async(req, res, next) => {
             email: email,
             password: hashedPassword
         })
-        await user.save()
+        await user.save() 
 
         const PRIVATE_TOKEN = jwt.sign(
             {userId: user._id},
@@ -53,19 +53,17 @@ const login = async(req, res, next) => {
                 PRIVATE_TOKEN
             });
         }
-        res.json('wrong password !');
+        res.json({
+            message: 'wrong password !',
+            sign: false
+        });
     }catch(err){
         return res.json(err.message)
     }
 }
 
-// Authenticated
-async function Authenticated(req, res, next){
-
-}
 
 module.exports = {
                 register,
-                login,
-                Authenticated
+                login
                 }

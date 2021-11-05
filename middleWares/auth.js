@@ -16,7 +16,7 @@ const Authenticate = async(req, res, next) => {
 		next()
 	} catch (error) {
 		console.log(error)
-		return res.status(403).json({ success: false, message: error.message })
+		return res.status(401).json({ success: false, message: error.message })
 	}
 }
 

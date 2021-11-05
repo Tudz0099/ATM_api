@@ -1,8 +1,10 @@
 const router = require('express').Router();
-const {postAtm, deleteAtm, getAtms} = require('../controller/atm')
+const { Authenticate } = require('../middleWares/auth');
+const {postAtm, deleteAtm, getAtms, addPeople} = require('../controller/atm')
 
-router.post('/', postAtm);
-router.get('/', getAtms);
-router.delete('/:atmId', deleteAtm);
+router.post('/', Authenticate, postAtm);
+router.post('/people', Authenticate, addPeople);
+router.get('/', Authenticate, getAtms);
+router.delete('/:atmId', Authenticate, deleteAtm);
 
 module.exports = router;

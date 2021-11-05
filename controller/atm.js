@@ -86,7 +86,7 @@ setInterval(() => {
     function randomPerson() {
         let text = '';
         let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        let number = "1234567";
+        let number = "1234";
         let person = {};
        
         for (var i = 0; i < 8; i++)
@@ -98,10 +98,14 @@ setInterval(() => {
     
         person.name = text
         return person; 
-    } 
+    }
 
-    data.transactions(randomPerson()) 
+    data.queues.push(randomPerson())
+    data.transactions()
     data.setTransactionInterval()
+    if(data.queues.length > 3){
+        data.transactions()
+    }
 }, 1000);
 
 

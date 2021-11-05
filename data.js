@@ -33,52 +33,33 @@ const data = {
             if(this.atms[i].transaction && this.atms[i].transaction > 0){
                 this.atms[i].transaction = this.atms[i].transaction - 1
             }
+            else if(this.atms[i].transaction == 0){
+                this.atms[i].status = 'Free'
+                this.atms[i].client = ''
+                this.atms[i].transaction = ''
+            }
         }
     },
 
     // transaction
-    transactions(randomPerson){
-        const setTransactionTime = (atmHandle, client) => { 
-            setTimeout(() => { 
-                atmHandle.status = 'Free'
-                atmHandle.client = ''
-                atmHandle.transaction = ''
-             }, atmHandle.transaction*1000);
-             this.processedClients += `${client}, `
-        }
+    transactions(){
 
-        if(this.queues.length > 0) {  
+        if(this.queues.length > 0) {
             for(i=0; i < this.atms.length; i++){
                 if(this.atms[i].status === 'Free' && this.atms[i].remove == false){
                     const atmHandle = this.atms[i]
-                    atmHandle.status = 'Busy' 
+                    atmHandle.status = 'Busy'
                     atmHandle.client = this.queues[0].name
                     atmHandle.transaction = this.queues[0].transaction
- 
-                    setTransactionTime(atmHandle, this.queues[0].name);
-                    this.queues.splice(0, 1)  
+                    this.processedClients += `${this.queues[0].name}, `
+                  
+                    this.queues.splice(0, 1)
                     break;
                 }
             }
         }
 
-        for(i=0; i < this.atms.length; i++){
-            if(this.atms[i].status === 'Free' && this.atms[i].remove == false){
-                const atmHandle = this.atms[i]
-                atmHandle.status = 'Busy'
-                atmHandle.client = randomPerson.name
-                atmHandle.transaction = randomPerson.transaction
+    }
+}  
 
-                setTransactionTime(atmHandle, randomPerson.name);
-                break;
-            }
-        }
-
-        const findAtm = this.atms.find(e => e.status === 'Free')
-        if(!findAtm){
-            this.queues.push(randomPerson)
-        }
-    } 
-}
-
-module.exports = data  
+module.exports = data   
